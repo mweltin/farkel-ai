@@ -160,6 +160,13 @@ class Turn:
             return True
 
         return False
+
+    def ones_count(self):
+        return self.__current_role.count(1)
+
+    def fives_count(self):
+        return self.__current_role.count(5)
+
                 ################### Getters / Setters #####################
     @property
     def current_role(self):

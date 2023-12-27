@@ -105,7 +105,7 @@ class TestTurn(unittest.TestCase):
         test_value = turn.has_three_pairs()
         self.assertTrue(test_value)
 
-        turn.current_role = [2,2,2,2,2,2]
+        turn.current_role = [2, 2, 2, 2, 2, 2]
         test_value = turn.has_three_pairs()
         # technically true but why would you score it that way
         self.assertTrue(test_value)
@@ -253,7 +253,7 @@ class TestTurn(unittest.TestCase):
         turn.current_role = [1, 2, 2, 2]
         test_value = turn.has_three_twos()
         self.assertTrue(test_value)
-        
+
     def test_has_three_ones(self):
         turn = Turn()
         turn.current_role = [1, 2]
@@ -274,6 +274,47 @@ class TestTurn(unittest.TestCase):
         turn.current_role = [1, 1, 1, 1]
         test_value = turn.has_three_ones()
         self.assertTrue(test_value)
-        
+
+    def test_ones_count(self):
+        turn = Turn()
+        test_list = [5, 5, 5, 6]
+        turn.current_role = test_list
+        test_value = turn.ones_count()
+        self.assertEqual(test_value, test_list.count(1))
+
+        test_list = [1, 5, 5, 6]
+        turn.current_role = test_list
+        test_value = turn.ones_count()
+        self.assertEqual(test_value, test_list.count(1))
+
+        test_list = [5, 5, 1, 1, 1, 6]
+        turn.current_role = test_list
+        test_value = turn.ones_count()
+        self.assertEqual(test_value, test_list.count(1))
+
+    def test_fives_count(self):
+        turn = Turn()
+        test_list = [1, 1, 1, 6]
+        turn.current_role = test_list
+        test_value = turn.fives_count()
+        self.assertEqual(test_value, test_list.count(5))
+
+        test_list = [5, 1, 1, 6]
+        turn.current_role = test_list
+        test_value = turn.fives_count()
+        self.assertEqual(test_value, test_list.count(5))
+
+        test_list = [1, 1, 5, 5, 5, 6]
+        turn.current_role = test_list
+        test_value = turn.fives_count()
+        self.assertEqual(test_value, test_list.count(5))
+
+    def test_ones_count(self):
+        pass
+
+    def test_fives_count(self):
+        pass
+
+
 if __name__ == '__main__':
     unittest.main()
