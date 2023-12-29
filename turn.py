@@ -1,5 +1,6 @@
 from random import randint
 from exception import InvalidNumberOfDice, InvalidDieValue
+from score import Score
 
 
 class Turn:
@@ -9,8 +10,25 @@ class Turn:
             raise InvalidNumberOfDice("Turn class instantiation failed.")
         self.dice_in_play = dice_in_play
         self.__current_role = []
-        is_farkel = False
         self.__score = 0
+        self.score_table = Score()
+        self.__scoring_opportunities = {
+            'Six_of_a_kind': False,
+            'Two_triplets': False,
+            'Five_of_a_kind': False,
+            'Straight': False,
+            'Three_pairs': False,
+            'Four_of_a_kind_and_a_pair': False,
+            'Four_of_a_kind': False,
+            'Three_6s': False,
+            'Three_5s': False,
+            'Three_4s': False,
+            'Three_3s': False,
+            'Three_1s': False,
+            'Three_2s': False,
+            'Single_1': False,
+            'Single_5': False,
+        }
 
     def roll(self):
         self.__current_role = []
@@ -66,7 +84,7 @@ class Turn:
             return False
 
         for idx, x in enumerate(self.__current_role):
-            if x != idx +1:
+            if x != idx + 1:
                 return False
 
         return True
@@ -76,8 +94,8 @@ class Turn:
             return False
 
         if self.__current_role[0] == self.__current_role[1] and \
-            self.__current_role[2] == self.__current_role[3] and \
-            self.__current_role[4] == self.__current_role[5]:
+                self.__current_role[2] == self.__current_role[3] and \
+                self.__current_role[4] == self.__current_role[5]:
             return True
 
         return False
@@ -90,7 +108,7 @@ class Turn:
         max_value = max(self.__current_role)
 
         if (self.__current_role.count(min_value) == 4 and self.__current_role.count(max_value) == 2) or \
-           (self.__current_role.count(max_value) == 4 and self.__current_role.count(min_value) == 2):
+                (self.__current_role.count(max_value) == 4 and self.__current_role.count(min_value) == 2):
             return True
 
         return False
@@ -99,7 +117,7 @@ class Turn:
         if len(self.__current_role) < 4:
             return False
 
-        test_list = [1,2,3,4,5,6]
+        test_list = [1, 2, 3, 4, 5, 6]
 
         for x in test_list:
             if self.__current_role.count(x) == 4:
@@ -161,13 +179,40 @@ class Turn:
 
         return False
 
-    def ones_count(self):
-        return self.__current_role.count(1)
+    def single_ones(self):
+        return self.__current_role.count(1) * 100
 
-    def fives_count(self):
-        return self.__current_role.count(5)
+    def single_fives(self):
+        return self.__current_role.count(5) * 50
 
-                ################### Getters / Setters #####################
+    def find_valid_scoring_opportunities(self):
+        rolled_dice = len(self.__current_role)
+
+        for scoring_opportunity in self.score_table.table:
+            if rolled_dice <= scoring_opportunity['min_dice_required']:
+                self.__scoring_opportunities[scoring_opportunity['name']] = getattr(self, scoring_opportunity['func'])()
+
+
+    def reset_score_opportunities(self):
+        self.__scoring_opportunities = {
+            'Six_of_a_kind': False,
+            'Two_triplets': False,
+            'Five_of_a_kind': False,
+            'Straight': False,
+            'Three_pairs': False,
+            'Four_of_a_kind_and_a_pair': False,
+            'Four_of_a_kind': False,
+            'Three_6s': False,
+            'Three_5s': False,
+            'Three_4s': False,
+            'Three_3s': False,
+            'Three_1s': False,
+            'Three_2s': False,
+            'Single_1': False,
+            'Single_5': False,
+        }
+        ################### Getters / Setters #####################
+
     @property
     def current_role(self):
         return self.__current_role
@@ -182,3 +227,12 @@ class Turn:
                 raise InvalidDieValue
         self.__current_role = sorted(value)
 
+    @property
+    def scoring_opportunities(self):
+        return self.__scoring_opportunities
+
+    @scoring_opportunities.setter
+    def scoring_opportunities(self, args):
+        '''used for testing only '''
+        key, value = args
+        self.__scoring_opportunities[key] = value

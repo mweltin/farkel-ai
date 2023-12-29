@@ -275,45 +275,58 @@ class TestTurn(unittest.TestCase):
         test_value = turn.has_three_ones()
         self.assertTrue(test_value)
 
-    def test_ones_count(self):
+    def test_single_ones(self):
         turn = Turn()
         test_list = [5, 5, 5, 6]
         turn.current_role = test_list
-        test_value = turn.ones_count()
-        self.assertEqual(test_value, test_list.count(1))
+        test_value = turn.single_ones()
+        actual_value = test_list.count(1) * 100
+        self.assertEqual(test_value, actual_value)
 
         test_list = [1, 5, 5, 6]
         turn.current_role = test_list
-        test_value = turn.ones_count()
-        self.assertEqual(test_value, test_list.count(1))
+        test_value = turn.single_ones()
+        actual_value = test_list.count(1) * 100
+        self.assertEqual(test_value, actual_value)
 
         test_list = [5, 5, 1, 1, 1, 6]
         turn.current_role = test_list
-        test_value = turn.ones_count()
-        self.assertEqual(test_value, test_list.count(1))
+        test_value = turn.single_ones()
+        actual_value = test_list.count(1) * 100
+        self.assertEqual(test_value, actual_value)
 
-    def test_fives_count(self):
+    def test_single_fives(self):
         turn = Turn()
         test_list = [1, 1, 1, 6]
         turn.current_role = test_list
-        test_value = turn.fives_count()
-        self.assertEqual(test_value, test_list.count(5))
+        test_value = turn.single_fives()
+        actual_value = test_list.count(5) * 50
+        self.assertEqual(test_value, actual_value)
 
         test_list = [5, 1, 1, 6]
         turn.current_role = test_list
-        test_value = turn.fives_count()
-        self.assertEqual(test_value, test_list.count(5))
+        test_value = turn.single_fives()
+        actual_value = test_list.count(5) * 50
+        self.assertEqual(test_value, actual_value)
 
         test_list = [1, 1, 5, 5, 5, 6]
         turn.current_role = test_list
-        test_value = turn.fives_count()
-        self.assertEqual(test_value, test_list.count(5))
+        test_value = turn.single_fives()
+        actual_value = test_list.count(5) * 50
+        self.assertEqual(test_value, actual_value)
 
-    def test_ones_count(self):
-        pass
+    def test_reset_score_opportunities(self):
+        turn = Turn()
+        turn.scoring_opportunities = ('Six_of_a_kind', True)
+        turn.reset_score_opportunities()
+        self.assertFalse(turn.scoring_opportunities['Six_of_a_kind'])
 
-    def test_fives_count(self):
-        pass
+    def test_find_valid_scoring_opportunities(self):
+        turn = Turn()
+        test_list = [2, 2, 2, 2, 2, 2]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Six_of_a_kind'])
 
 
 if __name__ == '__main__':
