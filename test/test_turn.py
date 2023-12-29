@@ -1,6 +1,6 @@
 import unittest
 from turn import Turn
-from turn.exception import InvalidNumberOfDice, InvalidDieValue
+from exception import InvalidNumberOfDice, InvalidDieValue
 
 
 class TestTurn(unittest.TestCase):
@@ -318,8 +318,37 @@ class TestTurn(unittest.TestCase):
     def test_reset_score_opportunities(self):
         turn = Turn()
         turn.scoring_opportunities = ('Six_of_a_kind', True)
+        turn.scoring_opportunities = ('Two_triplets', True)
+        turn.scoring_opportunities = ('Five_of_a_kind', True)
+        turn.scoring_opportunities = ('Straight', True)
+        turn.scoring_opportunities = ('Three_pairs', True)
+        turn.scoring_opportunities = ('Four_of_a_kind_and_a_pair', True)
+        turn.scoring_opportunities = ('Four_of_a_kind', True)
+        turn.scoring_opportunities = ('Three_6s', True)
+        turn.scoring_opportunities = ('Three_5s', True)
+        turn.scoring_opportunities = ('Three_4s', True)
+        turn.scoring_opportunities = ('Three_3s', True)
+        turn.scoring_opportunities = ('Three_1s', True)
+        turn.scoring_opportunities = ('Three_2s', True)
+        turn.scoring_opportunities = ('Single_1', True)
+        turn.scoring_opportunities = ('Single_5', True)
+
         turn.reset_score_opportunities()
         self.assertFalse(turn.scoring_opportunities['Six_of_a_kind'])
+        self.assertFalse(turn.scoring_opportunities['Two_triplets'])
+        self.assertFalse(turn.scoring_opportunities['Five_of_a_kind'])
+        self.assertFalse(turn.scoring_opportunities['Straight'])
+        self.assertFalse(turn.scoring_opportunities['Three_pairs'])
+        self.assertFalse(turn.scoring_opportunities['Four_of_a_kind_and_a_pair'])
+        self.assertFalse(turn.scoring_opportunities['Four_of_a_kind'])
+        self.assertFalse(turn.scoring_opportunities['Three_6s'])
+        self.assertFalse(turn.scoring_opportunities['Three_5s'])
+        self.assertFalse(turn.scoring_opportunities['Three_4s'])
+        self.assertFalse(turn.scoring_opportunities['Three_3s'])
+        self.assertFalse(turn.scoring_opportunities['Three_1s'])
+        self.assertFalse(turn.scoring_opportunities['Three_2s'])
+        self.assertFalse(turn.scoring_opportunities['Single_1'])
+        self.assertFalse(turn.scoring_opportunities['Single_5'])
 
     def test_find_valid_scoring_opportunities(self):
         turn = Turn()
@@ -328,7 +357,75 @@ class TestTurn(unittest.TestCase):
         turn.find_valid_scoring_opportunities()
         self.assertTrue(turn.scoring_opportunities['Six_of_a_kind'])
 
+        test_list = [2, 2, 2, 4, 4, 4]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Two_triplets'])
 
+        test_list = [2, 1, 1, 1, 1, 1]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Five_of_a_kind'])
+
+        test_list = [1, 2, 3, 4, 5, 6]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Straight'])
+
+        test_list = [1, 1, 2, 2, 3, 3]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Three_pairs'])
+
+        test_list = [2, 2, 1, 1, 1, 1]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Four_of_a_kind_and_a_pair'])
+
+        test_list = [1, 1, 1, 1]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Four_of_a_kind'])
+
+        test_list = [1, 6, 6, 6]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Three_6s'])
+
+        test_list = [6, 5, 5, 5]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Three_5s'])
+
+        test_list = [4, 4, 4]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Three_4s'])
+
+        test_list = [4, 3, 3, 3]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Three_3s'])
+
+        test_list = [2, 2, 2]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Three_2s'])
+
+        test_list = [1, 1, 1, 5, 6]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Three_1s'])
+
+        test_list = [1, 3, 4]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Single_1'])
+
+        test_list = [1, 5, 4]
+        turn.current_role = test_list
+        turn.find_valid_scoring_opportunities()
+        self.assertTrue(turn.scoring_opportunities['Single_5'])
 
 
 if __name__ == '__main__':
