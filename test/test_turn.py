@@ -1,6 +1,6 @@
 import unittest
 from turn import Turn
-from exception import InvalidNumberOfDice, InvalidDieValue
+from turn.exception import InvalidNumberOfDice, InvalidDieValue
 
 
 class TestTurn(unittest.TestCase):
