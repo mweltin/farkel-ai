@@ -4,10 +4,8 @@ from exception import InvalidNumberOfDice, InvalidDieValue
 
 class Turn:
 
-    def __init__(self, dice_in_play=6):
-        if dice_in_play <= 0 or dice_in_play > 6:
-            raise InvalidNumberOfDice("Turn class instantiation failed.")
-        self.dice_in_play = dice_in_play
+    def __init__(self):
+        self.__dice_in_play = None
         self.__current_role = []
         self.__score = 0
         self.score_table = Score()
@@ -43,6 +41,13 @@ class Turn:
             if rolled_dice >= scoring_opportunity['min_dice_required']:
                 self.__scoring_opportunities[scoring_opportunity['name']] = getattr(self, scoring_opportunity['func'])()
 
+    def full_turn(self, number_of_dice):
+        self.dice_in_play = number_of_dice
+        self.reset_score_opportunities()
+        self.roll()
+        self.find_valid_scoring_opportunities()
+        return self.__scoring_opportunities
+
 
     def reset_score_opportunities(self):
         self.__scoring_opportunities = {
@@ -62,6 +67,15 @@ class Turn:
             'Single_1': False,
             'Single_5': False,
         }
+
+################### getters setters ###############
+
+    @property
+    def is_farkel(self):
+        for key, value in self.__scoring_opportunities.items():
+            if value:
+                return False
+        return True
 
     @property
     def current_role(self):
@@ -87,6 +101,17 @@ class Turn:
         key, value = args
         self.__scoring_opportunities[key] = value
 
+    @property
+    def dice_in_play(self):
+        return self.__dice_in_play
+
+    @dice_in_play.setter
+    def dice_in_play(self, number_of_dice):
+        if number_of_dice <= 0 or number_of_dice > 6:
+            raise InvalidNumberOfDice("Turn class instantiation failed.")
+        self.__dice_in_play = number_of_dice
+
+############### roll evaluation
     def has_six_of_a_kind(self):
         if len(self.__current_role) != 6:
             return False
