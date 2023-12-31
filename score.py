@@ -16,4 +16,5 @@ class Score:
             {'name': 'Three_2s', 'value': 200, 'min_dice_required': 3, 'func': 'has_three_twos' },
             {'name': 'Single_1', 'value': 100, 'min_dice_required': 1, 'func': 'single_ones' },
             {'name': 'Single_5', 'value': 50, 'min_dice_required': 1, 'func': 'single_fives' },
+            {'name': 'Farke', 'value': None, 'min_dice_required': 1, 'func': 'is_farkel' },
         ]

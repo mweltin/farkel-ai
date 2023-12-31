@@ -25,6 +25,7 @@ class Turn:
             'Three_2s': False,
             'Single_1': False,
             'Single_5': False,
+            'Farkel': False,
         }
 
     def roll(self):
@@ -66,6 +67,7 @@ class Turn:
             'Three_2s': False,
             'Single_1': False,
             'Single_5': False,
+            'Farke': False,
         }
 
 ################### getters setters ###############
