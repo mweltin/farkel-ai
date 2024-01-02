@@ -25,8 +25,8 @@ class Turn:
             'Three_2s': False,
             'Single_1': False,
             'Single_5': False,
-            'Farkel': False,
         }
+        self.farkel = False
 
     def roll(self):
         self.__current_role = []

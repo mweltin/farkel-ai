@@ -4,7 +4,7 @@ from score import Score
 
 class Player:
 
-    def __init__(self):
+    def __init__(self, name=None):
         self.turn_score = 0
         self.score = 0  # holds cumulative score
         self.turn = Turn()
@@ -12,15 +12,21 @@ class Player:
         self.scoring_options = {}
         self.first_turn = True
         self.hit_ten_thousand = False
+        self.farkeled = False
+        self.name = name
 
     def roll_dice(self, number_of_dice):
+        self.farkeled = False
         self.scoring_options = self.turn.full_turn(number_of_dice)
+        if self.turn.is_farkel:
+            self.farkeled = True
+
 
     def show_scoring_choices(self):
         i = 0
         for key, value in self.scoring_options.items():
             if value == True:
-                print(str(i)+" :"+key)
+                print(str(i) + " :" + key)
                 i += 1
 
     def pick_scoring_option(self, choice):
@@ -43,6 +49,7 @@ class Player:
                 # here you have to make a second choice of how many you want to use to score
         else:
             pass
+
     def end_turn(self):
         self.score += self.turn_score
         self.turn_score = 0
