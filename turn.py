@@ -1,76 +1,11 @@
 from random import randint
-from score import Score
 from exception import InvalidNumberOfDice, InvalidDieValue
+
 
 class Turn:
 
     def __init__(self):
-        self.__dice_in_play = None
-        self.__current_role = []
-        self.__score = 0
-        self.score_table = Score()
-        self.__scoring_opportunities = {
-            'Six_of_a_kind': False,
-            'Two_triplets': False,
-            'Five_of_a_kind': False,
-            'Straight': False,
-            'Three_pairs': False,
-            'Four_of_a_kind_and_a_pair': False,
-            'Four_of_a_kind': False,
-            'Three_6s': False,
-            'Three_5s': False,
-            'Three_4s': False,
-            'Three_3s': False,
-            'Three_1s': False,
-            'Three_2s': False,
-            'Single_1': False,
-            'Single_5': False,
-        }
-        self.farkel = False
-
-    def roll(self):
-        self.__current_role = []
-        for x in range(self.dice_in_play):
-            self.__current_role.append(randint(1, 6))
-        # ALL roll evaluation methods assume a sorted roll list
-        self.__current_role = sorted(self.__current_role)
-
-    def find_valid_scoring_opportunities(self):
-        rolled_dice = len(self.__current_role)
-
-        for scoring_opportunity in self.score_table.table:
-            if rolled_dice >= scoring_opportunity['min_dice_required']:
-                self.__scoring_opportunities[scoring_opportunity['name']] = getattr(self, scoring_opportunity['func'])()
-
-    def full_turn(self, number_of_dice):
-        self.dice_in_play = number_of_dice
-        self.reset_score_opportunities()
-        self.roll()
-        self.find_valid_scoring_opportunities()
-        return self.__scoring_opportunities
-
-
-    def reset_score_opportunities(self):
-        self.__scoring_opportunities = {
-            'Six_of_a_kind': False,
-            'Two_triplets': False,
-            'Five_of_a_kind': False,
-            'Straight': False,
-            'Three_pairs': False,
-            'Four_of_a_kind_and_a_pair': False,
-            'Four_of_a_kind': False,
-            'Three_6s': False,
-            'Three_5s': False,
-            'Three_4s': False,
-            'Three_3s': False,
-            'Three_1s': False,
-            'Three_2s': False,
-            'Single_1': False,
-            'Single_5': False,
-            'Farke': False,
-        }
-
-################### getters setters ###############
+        pass
 
     @property
     def is_farkel(self):
@@ -113,7 +48,7 @@ class Turn:
             raise InvalidNumberOfDice("Turn class instantiation failed.")
         self.__dice_in_play = number_of_dice
 
-############### roll evaluation
+    ############### roll evaluation
     def has_six_of_a_kind(self):
         if len(self.__current_role) != 6:
             return False

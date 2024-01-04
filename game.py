@@ -1,33 +1,27 @@
 from player import Player
+from play import roll, show_roll
+from roll_eval import RollEval
 
-player1 = Player('player 1')
-player2 = Player('player 2')
 
+def main(number_of_players=2):
+    player_lst = []
+    for x in range(number_of_players):
+        player_lst.append(Player('player ' + str(x + 1)))
 
-def main():
-    current_player = player1
-
-    while player1.score < 10000 or player2.score < 10000:
+    for player in player_lst:
+        print(player)
         dice_in_play = 6
-        print(current_player.name+"'s turn")
-        choice = 'y'
-        while choice == 'y':
-            current_player.roll_dice(dice_in_play)
-            if current_player.farkeled:
+        while not player.done:
+            current_roll = roll(dice_in_play)
+            show_roll(current_roll)
+            roll_eval = RollEval(current_roll)
+            if roll_eval.is_farkel:
+                print("Farkeled!")
+                player.done = True
                 break
-            current_player.show_scoring_choices()
-            print("or 'e' to end your turn")
-            choice = input("make a choice: ")
-            current_player.pick_scoring_option(choice)
-            choice = input("roll again [y/n]: ")
-        current_player = toggle_current_player(current_player)
-
-
-def toggle_current_player(_current_player):
-    if _current_player == player1:
-        return player2
-    else:
-        return player1
+            else:
+                roll_eval.show_scoring_choices()
+            player.done = True
 
 
 if __name__ == "__main__":

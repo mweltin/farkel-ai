@@ -1,5 +1,5 @@
-from turn import Turn
-from score import Score
+from random import randint
+from play import roll
 
 
 class Player:
@@ -7,27 +7,11 @@ class Player:
     def __init__(self, name=None):
         self.turn_score = 0
         self.score = 0  # holds cumulative score
-        self.turn = Turn()
-        self.score_table = Score()
-        self.scoring_options = {}
-        self.first_turn = True
-        self.hit_ten_thousand = False
-        self.farkeled = False
+        self.done = False
         self.name = name
 
-    def roll_dice(self, number_of_dice):
-        self.farkeled = False
-        self.scoring_options = self.turn.full_turn(number_of_dice)
-        if self.turn.is_farkel:
-            self.farkeled = True
-
-
-    def show_scoring_choices(self):
-        i = 0
-        for key, value in self.scoring_options.items():
-            if value == True:
-                print(str(i) + " :" + key)
-                i += 1
+    def __str__(self):
+        return self.name
 
     def pick_scoring_option(self, choice):
         if self.score_table[choice]['name'] != 'Single_1' or self.score_table[choice]['name'] != 'Single_5':
