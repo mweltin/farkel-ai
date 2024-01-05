@@ -1,22 +1,24 @@
 class RollEval:
     def __init__(self, roll):
         self.table = [
-            {'name': 'Six_of_a_kind', 'value': 3000, 'min_dice_required': 6, 'func': 'has_six_of_a_kind'},
-            {'name': 'Two_triplets', 'value': 2500, 'min_dice_required': 6, 'func': 'has_two_triplets'},
-            {'name': 'Five_of_a_kind', 'value': 2000, 'min_dice_required': 5, 'func': 'has_five_of_a_kind'},
-            {'name': 'Straight', 'value': 1500, 'min_dice_required': 6, 'func': 'has_straight'},
-            {'name': 'Three_pairs', 'value': 1500, 'min_dice_required': 6, 'func': 'has_three_pairs'},
-            {'name': 'Four_of_a_kind_and_a_pair', 'value': 1500, 'min_dice_required': 6,
+            {'name': 'Six_of_a_kind', 'value': 3000, 'num_of_dice': 6, 'func': 'has_six_of_a_kind'},
+            {'name': 'Two_triplets', 'value': 2500, 'num_of_dice': 6, 'func': 'has_two_triplets'},
+            {'name': 'Five_of_a_kind', 'value': 2000, 'num_of_dice': 5, 'func': 'has_five_of_a_kind'},
+            {'name': 'Straight', 'value': 1500, 'num_of_dice': 6, 'func': 'has_straight'},
+            {'name': 'Three_pairs', 'value': 1500, 'num_of_dice': 6, 'func': 'has_three_pairs'},
+            {'name': 'Four_of_a_kind_and_a_pair', 'value': 1500, 'num_of_dice': 6,
              'func': 'has_four_of_a_kind_and_a_pair'},
-            {'name': 'Four_of_a_kind', 'value': 1000, 'min_dice_required': 4, 'func': 'has_four_of_a_kind'},
-            {'name': 'Three_6s', 'value': 600, 'min_dice_required': 3, 'func': 'has_three_sixes'},
-            {'name': 'Three_5s', 'value': 500, 'min_dice_required': 3, 'func': 'has_three_fives'},
-            {'name': 'Three_4s', 'value': 400, 'min_dice_required': 3, 'func': 'has_three_fours'},
-            {'name': 'Three_3s', 'value': 300, 'min_dice_required': 3, 'func': 'has_three_threes'},
-            {'name': 'Three_1s', 'value': 300, 'min_dice_required': 3, 'func': 'has_three_ones'},
-            {'name': 'Three_2s', 'value': 200, 'min_dice_required': 3, 'func': 'has_three_twos'},
-            {'name': 'Single_1', 'value': 100, 'min_dice_required': 1, 'func': 'single_ones'},
-            {'name': 'Single_5', 'value': 50, 'min_dice_required': 1, 'func': 'single_fives'},
+            {'name': 'Four_of_a_kind', 'value': 1000, 'num_of_dice': 4, 'func': 'has_four_of_a_kind'},
+            {'name': 'Three_6s', 'value': 600, 'num_of_dice': 3, 'func': 'has_three_sixes'},
+            {'name': 'Three_5s', 'value': 500, 'num_of_dice': 3, 'func': 'has_three_fives'},
+            {'name': 'Three_4s', 'value': 400, 'num_of_dice': 3, 'func': 'has_three_fours'},
+            {'name': 'Three_3s', 'value': 300, 'num_of_dice': 3, 'func': 'has_three_threes'},
+            {'name': 'Three_1s', 'value': 300, 'num_of_dice': 3, 'func': 'has_three_ones'},
+            {'name': 'Three_2s', 'value': 200, 'num_of_dice': 3, 'func': 'has_three_twos'},
+            {'name': 'Double_1s', 'value': 200, 'num_of_dice': 2, 'func': 'double_ones'},
+            {'name': 'Double_5s', 'value': 100, 'num_of_dice': 2, 'func': 'double_fives'},
+            {'name': 'Single_1', 'value': 100, 'num_of_dice': 2, 'func': 'single_ones'},
+            {'name': 'Single_5', 'value': 50, 'num_of_dice': 1, 'func': 'single_fives'},
         ]
         self.current_roll = sorted(roll)
         self.scoring_opportunities = {
@@ -33,6 +35,8 @@ class RollEval:
             'Three_3s': False,
             'Three_1s': False,
             'Three_2s': False,
+            'Double_1s': False,
+            'Double_5s': False,
             'Single_1': False,
             'Single_5': False,
         }
@@ -42,31 +46,18 @@ class RollEval:
         rolled_dice = len(self.current_roll)
 
         for scoring_opportunity in self.table:
-            if rolled_dice >= scoring_opportunity['min_dice_required']:
+            if rolled_dice >= scoring_opportunity['num_of_dice']:
                 self.scoring_opportunities[scoring_opportunity['name']] = getattr(self,
                                                                                   scoring_opportunity['func'])()
 
-    def show_scoring_choices(self):
+    def get_scoring_choices(self):
+        scoring_options = []
         i = 0
         for key, value in self.scoring_opportunities.items():
             if value:
-                points = self.get_points(key)
-                print(str(i) + " " + key + " " + str(points))
-                i += 1
-
-    def get_points(self, lookup):
-        row = next(item for item in self.table if item["name"] == lookup)
-
-        match lookup:
-
-            case 'Six_of_a_kind' | 'Two_triplets' | 'Five_of_a_kind' | 'Straight' | 'Three_pairs' | \
-                 'Four_of_a_kind_and_a_pair' | 'Four_of_a_kind' | 'Three_6s' | 'Three_5s' | 'Three_4s' | 'Three_3s' | \
-                 'Three_1s' | 'Three_2s':
-                return row['value']
-            case 'Single_1':
-                return row['value'] * self.current_roll.count(1)
-            case 'Single_5':
-                return row['value'] * self.current_roll.count(1)
+                row = next(item for item in self.table if item["name"] == key)
+                scoring_options.append(row)
+        return scoring_options
 
     @property
     def is_farkel(self):
@@ -219,7 +210,19 @@ class RollEval:
         return False
 
     def single_ones(self):
-        return self.current_roll.count(1) * 100
+        if self.current_roll.count(1) >=1:
+            return True
+        return False
 
     def single_fives(self):
-        return self.current_roll.count(5) * 50
+        if self.current_roll.count(5) >=1:
+            return True
+    def double_ones(self):
+        if self.current_roll.count(1) >= 2:
+            return True
+        return False
+
+    def double_fives(self):
+        if self.current_roll.count(5) >= 2:
+            return True
+        return False

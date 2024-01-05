@@ -20,8 +20,20 @@ def main(number_of_players=2):
                 player.done = True
                 break
             else:
-                roll_eval.show_scoring_choices()
-            player.done = True
+                choice_list = roll_eval.get_scoring_choices()
+            for idx, choice in enumerate(choice_list):
+                print(f"{idx}: {choice['name']} {choice['value']}")
+            score_choice = input("Choose a scoring option: ")
+            player.score += choice_list[score_choice]['value']
+            dice_in_play -= choice_list[score_choice]['num_of_dice']
+            if dice_in_play >= 1:
+                keep_rolling = input("Continue rolling [y/n]: ")
+            else:
+                player.done = True
+            if keep_rolling == 'n':
+                player.done = True
+            if player.done:
+                print(f"{player} {player.score}")
 
 
 if __name__ == "__main__":
