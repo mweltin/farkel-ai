@@ -1,6 +1,7 @@
 from player import Player
 from play import roll, show_roll
 from roll_eval import RollEval
+import argparse
 
 
 def main(number_of_players=2):
@@ -44,4 +45,10 @@ def main(number_of_players=2):
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument("-np", '--number_of_players', metavar='n', type=int,
+                        help='an integer for the accumulator')
+    args = parser.parse_args()
+
+    main(args.number_of_players)
