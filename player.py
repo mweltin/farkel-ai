@@ -9,6 +9,7 @@ class Player:
         self.score = 0  # holds cumulative score
         self.done = False
         self.name = name
+        self.first_round = True
 
     def __str__(self):
         return self.name
